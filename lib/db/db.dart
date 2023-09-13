@@ -1,9 +1,10 @@
 import 'package:mongo_dart/mongo_dart.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DbMongo {
   Future<void> connectToDb() async {
     String dbURl =
-        'mongodb+srv://contact:DHT4WIsFEmqELpyd@cluster0.zdj1sbf.mongodb.net/?retryWrites=true&w=majority';
+        'mongodb+srv://${dotenv.env['DB_USERNAME']}:${dotenv.env['DB_PASSWORD']}@${dotenv.env['DB_HOST']}/?retryWrites=true&w=majority';
     var db = await Db.create(dbURl);
     try {
       await db.open();
@@ -11,6 +12,6 @@ class DbMongo {
     } catch (e) {
       print('Erreur lors de la connexion : $e');
     }
-    await db.close();
+
   }
 }

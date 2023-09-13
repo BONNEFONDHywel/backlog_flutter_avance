@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'db/db.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async  {
+  await dotenv.load(fileName: "assets/.env");
+  var db = DbMongo();
+  db.connectToDb();
   runApp(const MainApp());
 }
 
