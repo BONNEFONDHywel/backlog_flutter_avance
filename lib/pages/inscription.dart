@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'dart:convert';
+
+import 'package:ecurie/component/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -24,9 +27,7 @@ class _Screen2 extends State<Screen2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inscription'),
-      ),
+      appBar: buildApp(context, 'Inscription'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Form(
@@ -58,7 +59,7 @@ class _Screen2 extends State<Screen2> {
                         String name = nameController.text;
                         String password = passwordController.text;
                         String email = emailController.text;
-                        String picture = pictureController.text;
+                        String? picture = _selectedImagePath == null ? "assets/myGentleMan.jpg" : _selectedImagePath;
 
                         User personPerso = User(
                           name: name,
@@ -67,7 +68,10 @@ class _Screen2 extends State<Screen2> {
                           picture: picture,
                         );
 
-                        DbMongo.insertInDb(personPerso, 'Inscription');
+                        String jsonUser = jsonEncode(personPerso);
+                        print(jsonUser);
+
+                        // DbMongo.insertInDb(jsonUser, 'Inscription');
                       }
                     },
                   ),
@@ -131,6 +135,7 @@ class _Screen2 extends State<Screen2> {
         }
         return null;
       },
+      controller: nameController,
     );
   }
 
@@ -143,6 +148,7 @@ class _Screen2 extends State<Screen2> {
         }
         return null;
       },
+      controller: passwordController,
     );
   }
 
@@ -155,6 +161,7 @@ class _Screen2 extends State<Screen2> {
         }
         return null;
       },
+      controller: emailController,
     );
   }
 }

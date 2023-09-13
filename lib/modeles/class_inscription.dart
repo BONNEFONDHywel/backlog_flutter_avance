@@ -2,7 +2,7 @@ class User {
   final String name;
   final String password;
   final String email;
-  final String picture;
+  final String? picture;
   String? phone;
   int? age;
   String? ffe;
