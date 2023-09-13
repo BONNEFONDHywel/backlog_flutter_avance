@@ -2,7 +2,6 @@ import 'package:ecurie/component/appbar.dart';
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:ecurie/component/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
