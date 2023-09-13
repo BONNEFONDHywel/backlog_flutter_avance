@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'db/db.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:ecurie/flux_dactivite.dart';
+import 'package:ecurie/pages/flux_dactivite.dart';
 
 void main() async  {
   await dotenv.load(fileName: "assets/.env");
