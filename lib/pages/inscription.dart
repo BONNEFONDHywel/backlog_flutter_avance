@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:ecurie/modeles/class_inscription.dart';
+
 class Screen2 extends StatelessWidget {
   const Screen2({super.key});
 
@@ -14,28 +16,19 @@ class Screen2 extends StatelessWidget {
           child: Column(
             children: <Widget>[
               TextFormField(
-                decoration: const InputDecoration(hintText: 'Prénom'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Veuillez écrire un prénom';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
                 decoration: const InputDecoration(hintText: 'Nom'),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Veuillez écrire un nom';
+                    return 'Veuillez renseigner un nom';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: const InputDecoration(hintText: 'Téléphone'),
+                decoration: const InputDecoration(hintText: 'Mot de passe'),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Veuillez écrire un numéro de téléphone';
+                    return 'Veuillez renseigner un mot de passe';
                   }
                   return null;
                 },
@@ -44,7 +37,16 @@ class Screen2 extends StatelessWidget {
                 decoration: const InputDecoration(hintText: 'Email'),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Veuillez écrire un mail';
+                    return 'Veuillez renseigner un email';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(hintText: 'Photo de profil'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Veuillez renseigner une photo de profil';
                   }
                   return null;
                 },
@@ -60,7 +62,8 @@ class Screen2 extends StatelessWidget {
                   TextButton(
                     child: const Text('Annuler'),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      print('pas réussi');
+                      // Navigator.of(context).pop();
                     },
                   ),
                 ],
