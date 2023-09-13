@@ -3,6 +3,7 @@ description: A new Flutter project.
 publish_to: 'none'
 version: 0.1.0
 
+
 environment:
   sdk: '>=3.1.1 <4.0.0'
 
@@ -10,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   mongo_dart: ^0.9.1
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -18,3 +20,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/.env
