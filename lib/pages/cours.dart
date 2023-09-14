@@ -10,7 +10,7 @@ class Cours extends StatefulWidget {
   State<Cours> createState() => _CoursState();
 }
 
-class _CoursState extends State<Cours>  {
+class _CoursState extends State<Cours> {
   int user = 2;
   List<DropdownMenuItem<String>> get dropdownItemsTerrain {
     List<DropdownMenuItem<String>> menuItemsTerrain = [
@@ -39,8 +39,35 @@ class _CoursState extends State<Cours>  {
     ];
     return menuItemsDiscipline;
   }
+
+  List listCoursActive = [];
+  List listCoursInactive = [];
+  List listMyCours = [];
+
   bool _dataUpdated = false;
- // await DbMongo.fetchAllItems('Cours').then(())
+  String _StatusCours = 'active';
+  List<DropdownMenuItem<String>> get dropdownItemsCours {
+    List<DropdownMenuItem<String>> menuItemsTerrain = [
+      DropdownMenuItem(child: Text("Cours de la semaine"), value: "active"),
+      DropdownMenuItem(child: Text("Cours Terminés"), value: "inactive"),
+      DropdownMenuItem(child: Text("Mes Cours"), value: "moi"),
+    ];
+    return menuItemsTerrain;
+  }
+
+  List? listCours = [];
+
+  /*fetchdata() async {
+    List listCours = await DbMongo.fetchAllItems('Cours');
+    for (var item in listCours){
+      if(item["datetime"].millisecondsSinceEpoch <= DateTime.now().millisecondsSinceEpoch){
+        listCoursInactive.add(item);
+      }else{
+        listCoursActive.add(item);
+        }
+    }
+ }*/
+  // await DbMongo.fetchAllItems('Cours').then(())
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,31 +88,94 @@ class _CoursState extends State<Cours>  {
     );
   }
 
-   _buildListCours()  {
-    return FutureBuilder<List<dynamic>>(
-        future: DbMongo.fetchAllItems('Cours'),
-        key: ValueKey(_dataUpdated),
-        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Erreur: ${snapshot.error}');
-          } else {
-            List? listCours = snapshot.data;
-            return ListView.builder(
-                itemCount: listCours?.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container( child: Card(child: Column(children: [ListTile(
-                    title:  Text( listCours?[index]['terrain']),
-                    subtitle:  Text(listCours?[index]['discipline']),
-                    tileColor: listCours?[index]['user']==user ? Colors.cyan: Colors.white,
-                  )],
-                  )
-                  )
-                  );
+  _buildListCours() {
+    return Container(
+      child: Column(
+        children: [
+          DropdownButtonFormField(
+              decoration: InputDecoration(labelText: 'Cours'),
+              value: _StatusCours,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _StatusCours = newValue!;
                 });
-          }
-        },
+              },
+              items: dropdownItemsCours),
+          FutureBuilder<List<dynamic>>(
+            future: DbMongo.fetchAllItems('Cours'),
+            key: ValueKey(_dataUpdated),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Erreur: ${snapshot.error}');
+              } else {
+                listCoursInactive = [];
+                listCoursActive = [];
+                listMyCours = [];
+                for (var item in snapshot.data!) {
+                  if (_StatusCours == "active" || _StatusCours == 'inactive') {
+                    if (item['statut'] == 'Accept') {
+                      if (DateTime.now().isAfter(item['datetime'])) {
+                        listCoursInactive.add(item);
+                      } else if (DateTime.now().isBefore(item['datetime'])) {
+                        listCoursActive.add(item);
+                      }
+                    }
+                  } else {
+                    if(item['user'] == user){
+                      listMyCours.add(item);
+
+                    }
+                  }
+                }
+
+                if (_StatusCours == 'active') {
+                  listCours = listCoursActive;
+                } else if (_StatusCours == 'moi') {
+                  listCours = listMyCours;
+                } else {
+                  listCours = listCoursInactive;
+                }
+
+                return Expanded(
+                    child: ListView.builder(
+                        itemCount: listCours?.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          String newFormat = DateFormat('dd/MM/yyyy hh:mm')
+                              .format(listCours?[index]["datetime"]);
+                          return Container(
+                              child: Card(
+                            color: listCours?[index]['user'] == user
+                                ? Colors.cyan
+                                : Colors.white,
+                            child: Padding(
+                                padding: EdgeInsets.all(18),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Cours de ${listCours?[index]['discipline']}',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text('Horaire : $newFormat'),
+                                    Text(
+                                        'Terrain : ${listCours?[index]['terrain']}'),
+                                    Text(
+                                        'Durée : ${listCours?[index]['duration']}'),
+                                    Text(
+                                        'Crée par ${listCours?[index]['user']}'),
+                                  ],
+                                )),
+                          ));
+                        }));
+              }
+            },
+          )
+        ],
+      ),
     );
   }
 
@@ -129,7 +219,7 @@ class _CoursState extends State<Cours>  {
               items: dropdownItemsDuration),
           DateTimeFormField(
             mode: DateTimeFieldPickerMode.dateAndTime,
-            dateFormat: DateFormat.yMMMMEEEEd(),
+            //dateFormat: DateFormat.yMMMMEEEEd(),
             decoration: const InputDecoration(
               hintStyle: TextStyle(color: Colors.black45),
               errorStyle: TextStyle(color: Colors.redAccent),
@@ -140,15 +230,16 @@ class _CoursState extends State<Cours>  {
             firstDate: DateTime.now().add(const Duration(days: 0)),
             initialDate: DateTime.now().add(const Duration(days: 0)),
             autovalidateMode: AutovalidateMode.always,
-
             validator: (value) {
               if (value == null) {
                 return 'Please choose a date';
+              } else if (DateTime.now().isAfter(value)) {
+                return 'Please choose another Date';
               }
               return null;
             },
             onDateSelected: (DateTime value) {
-              dateinput = value;
+              dateinput = value.toLocal();
             },
           ),
           TextButton(
@@ -168,14 +259,12 @@ class _CoursState extends State<Cours>  {
                   "statut": "Pending"
                 };
                 if (_formKey.currentState!.validate()) {
-
-                    setState(() {
-                      _dataUpdated = !_dataUpdated;
-                    });
+                  setState(() {
+                    _dataUpdated = !_dataUpdated;
+                  });
                   DbMongo.insertInDb(addCours, 'Cours');
                 }
               },
-
               child: const Text('Submit'),
             ),
           ),
