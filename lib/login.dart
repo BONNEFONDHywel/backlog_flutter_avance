@@ -31,6 +31,7 @@ class MyStatefulWidget extends StatefulWidget {
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }
 
+//Permet de sauvegarder les données entrées (nom et mdp) dans ces variables
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -41,13 +42,14 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       padding: const EdgeInsets.all(15),
       child: ListView(
         children: <Widget>[
+          // Le titre de la page
           Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.only(
                 left: 10,
-                bottom: 50,
+                bottom: 30,
                 right: 10,
-                top: 50
+                top: 30
             ),
             child: const Text(
               'Connexion',
@@ -58,6 +60,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ),
             )
           ),
+          // Entrer son nom d'utilisateur
           Container(
             padding: const EdgeInsets.all(10),
             child: TextField(
@@ -68,6 +71,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ),
             ),
           ),
+          // Entrer son mdp
           Container(
             padding: const EdgeInsets.all(10),
             child: TextField(
@@ -79,11 +83,26 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ),
             ),
           ),
+          // Redirige sur un pop-up pour réinitialiser son mdp par email (renseigner email et nom d'utilisateur)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextButton(
+                child: const Text(
+                  "J'ai oublié mon mot de passe",
+                  style: TextStyle(fontSize: 10),
+                ),
+                onPressed: () {
+                },
+              )
+            ]
+          ),
+          // Si on valide, on récupère les infos de la BDD et on se retrouve sur le profil (à finir)
           Container(
             height: 70,
             padding: const EdgeInsets.all(10),
             margin: const EdgeInsets.only(
-                top: 20,
+                top: 5,
                 bottom: 20
             ),
             child: ElevatedButton(
@@ -96,6 +115,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               },
             )
           ),
+          // En cliquant sur le bouton s'inscrire, cela redirige vers la page d'inscription (aka routes Alex)
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
