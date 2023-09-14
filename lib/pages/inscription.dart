@@ -1,9 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 import 'package:ecurie/modeles/class_inscription.dart';
+import 'package:ecurie/db/db.dart';
 
 class Screen2 extends StatefulWidget {
   Screen2({super.key});
@@ -60,14 +60,14 @@ class _Screen2 extends State<Screen2> {
                         String email = emailController.text;
                         String picture = pictureController.text;
 
-                        Inscription personPerso = Inscription(
+                        User personPerso = User(
                           name: name,
                           password: password,
                           email: email,
                           picture: picture,
                         );
 
-                        print(personPerso);
+                        DbMongo.insertInDb(personPerso, 'Inscription');
                       }
                     },
                   ),

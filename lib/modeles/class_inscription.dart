@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
-
-class Inscription {
+class User {
   final String name;
   final String password;
   final String email;
@@ -9,6 +7,6 @@ class Inscription {
   int? age;
   String? ffe;
 
-  Inscription(
+  User(
     {required this.name, required this.password, required this.email, required this.picture, this.phone, this.age, this.ffe});
 }
