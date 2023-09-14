@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../db/db.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -11,20 +10,11 @@ void main() async {
   runApp(const MainApp());
 }
 
-// Permet un retour sur la page d'accueil (aka routes Alex)
-AppBar buildAppBar(BuildContext context) {
-  return AppBar(
-    leading: const BackButton(),
-    backgroundColor: Colors.blueAccent,
-    elevation: 0,
-  );
-}
-
 class User {
   final String imagePath;
   final String username;
   final String email;
-  final int phoneNumber;
+  final String phoneNumber;
   final int age;
   final String linkToFFE;
 
@@ -38,14 +28,65 @@ class User {
   });
 }
 
-class userPreferences {
+Future _editProfile(BuildContext context) {
+  String _username = '';
+  String _email = '';
+  String _password = '';
+  String _age = '';
+  String _phoneNumber = '';
+  String _linkToFFE = '';
+
+  return showDialog(
+    context: context,
+    builder: (context) {
+      submit() {
+        Navigator.of(context).pop();
+      }
+      return AlertDialog(
+        title: const Text('Modifier le profil'),
+        content: Form(
+          child: Column(
+            children: [
+              TextFormField(
+                onChanged: (value) => _username = value,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Modifier'),
+            )
+          ],
+      ),
+    },
+  );
+}
+
+// Permet un retour sur la page d'accueil (aka routes Alex)
+AppBar buildAppBar(BuildContext context) {
+  return AppBar(
+    leading: const BackButton(),
+    title: const Text('Profil'),
+    actions: [
+      IconButton(
+        icon: const Icon(Icons.edit),
+        onPressed: () => _editProfile(context),
+      )
+    ],
+    backgroundColor: Colors.blueAccent,
+    elevation: 0,
+  );
+}
+
+class UserPreferences {
   static const myUser = User(
-      imagePath: 'https://www.la-spa.fr/app/assets-spa/uploads/2023/07/prendre-soin_duree-vie-chat.jpg',
-      username: 'Jean',
-      email: 'a@a',
-      phoneNumber: 0000000000,
-      age: 20,
-      linkToFFE: 'https://www.google.fr/',
+    imagePath: 'https://www.la-spa.fr/app/assets-spa/uploads/2023/07/prendre-soin_duree-vie-chat.jpg',
+    username: 'Jean',
+    email: 'a@a',
+    phoneNumber: '0000000000',
+    age: 20,
+    linkToFFE: 'https://www.google.fr/',
   );
 }
 
@@ -74,14 +115,15 @@ class ProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.primary;
 
     return Center(
-      child: BuildImage(),
+      child: buildImage(),
     );
   }
 
-  Widget BuildImage() {
+
+
+  Widget buildImage() {
     final image = NetworkImage(imagePath);
 
     return Padding(
@@ -111,14 +153,15 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
   @override
   Widget build(BuildContext context) {
-    final user = userPreferences.myUser;
+    const user = UserPreferences.myUser;
 
     return Scaffold(
       appBar: buildAppBar(context),
       body: ListView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
           ProfileWidget(
             imagePath: user.imagePath,
@@ -135,12 +178,17 @@ class _ProfilePageState extends State<ProfilePage> {
     children: [
       Text(
         user.username,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
       ),
       const SizedBox(height: 4),
       Text(
         user.email,
-        style: TextStyle(color: Colors.grey),
+        style: const TextStyle(color: Colors.grey, fontSize: 20),
+      ),
+      const SizedBox(height: 40),
+      Text(
+        "Mon âge : ${user.age}\nMon numéro de téléphone : ${user.phoneNumber}\nLien de mon profil FFE",
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
       ),
     ],
   );
