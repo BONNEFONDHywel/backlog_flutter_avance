@@ -29,19 +29,19 @@ class DbMongo {
     }
   }
 
+
   static Future<List> fetchAllItems(String nameCollection) async {
     var collection = db.collection(nameCollection);
     List result = [];
     try {
        result = await collection.find().toList();
        result.sort((a, b) => b["datetime"].compareTo(a["datetime"]));
-      /*for (var doc in result) {
-        items.add(Contact.fromJson(doc));
-      }*/
+
     } catch (e) {
       print('Erreur lors de la récupération : $e');
     }
     return result;
+
   }
   /*Future<void> deleteItem(String nameCollection, Map<String, dynamic>item) async{
     var collection = db.collection(nameCollection);
