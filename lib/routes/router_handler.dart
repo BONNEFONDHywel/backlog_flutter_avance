@@ -1,15 +1,20 @@
+import 'package:ecurie/pages/cours.dart';
+import 'package:ecurie/pages/flux_dactivite.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-
-import 'package:ecurie/pages/connexion.dart';
 import 'package:ecurie/pages/inscription.dart';
 
-var screen1 = Handler(
+var homePageHandler = Handler(
     handlerFunc: ((BuildContext? context, Map<String, dynamic> params) {
-      return const Screen1();
+      return const MyApp();
     }));
 
-var screen2 = Handler(
+var inscriptionHandler = Handler(
     handlerFunc: ((BuildContext? context, Map<String, dynamic> params) {
       return Screen2();
+    }));
+
+var coursHandler = Handler(
+    handlerFunc: ((BuildContext? context, Map<String, dynamic> params) {
+      return Cours();
     }));

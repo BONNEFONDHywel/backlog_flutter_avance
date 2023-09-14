@@ -14,7 +14,7 @@ class Screen1 extends StatelessWidget {
       ),
       bottomNavigationBar: ElevatedButton(
           onPressed: () {
-        Navigator.pushNamed(context, 'page2');
+        Navigator.pushNamed(context, '/page2');
       },
           child: const Text('Pas encore inscrit?'),
       ),
