@@ -8,5 +8,15 @@ class User {
   String? ffe;
 
   User(
-    {required this.name, required this.password, required this.email, required this.picture, this.phone, this.age, this.ffe});
+    {required this.name, required this.password, required this.email, this.picture = 'assets/myGentleMan.jpg', this.phone, this.age, this.ffe});
+
+  Map toJson() => {
+    'name': name,
+    'password': password,
+    'email': email,
+    'picture': picture,
+    'phone': phone,
+    'age': age,
+    'ffe': ffe,
+  };
 }
