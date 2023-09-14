@@ -37,6 +37,7 @@ class DbMongo {
     List result = [];
     try {
        result = await collection.find().toList();
+       result.sort((a, b) => b["datetime"].compareTo(a["datetime"]));
       /*for (var doc in result) {
         items.add(Contact.fromJson(doc));
       }*/
