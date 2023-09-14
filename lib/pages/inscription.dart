@@ -1,3 +1,4 @@
+import 'package:ecurie/component/appbar.dart';
 import 'package:flutter/material.dart';
 
 class Screen2 extends StatelessWidget {
@@ -6,9 +7,7 @@ class Screen2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inscription'),
-      ),
+      appBar: buildApp(context, 'Inscription'),
       body: Center(
         child: Form(
           child: Column(

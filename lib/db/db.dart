@@ -14,9 +14,6 @@ class DbMongo {
       await db.open();
       inspect(db);
       print('Connexion établie');
-      var collections = db.collection('Cours');
-      var result = await collections.find().toList();
-      print(result);
     } catch (e) {
       print('Erreur lors de la connexion : $e');
     }
