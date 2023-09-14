@@ -8,14 +8,15 @@ class Routes {
   static FluroRouter router = FluroRouter();
 
   static void initRoutes(FluroRouter router) {
+
     router.notFoundHandler = Handler(
         handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
           print("La route n'est pas trouvée");
           return;
         });
-
-    router.define('/', handler: screen1, transitionType: TransitionType.inFromBottom);
-    router.define('page2', handler: screen2, transitionType: TransitionType.inFromLeft);
+    //router.define('/', handler: homePageHandler, transitionType: TransitionType.inFromLeft);
+    router.define('/inscription', handler: inscriptionHandler, transitionType: TransitionType.inFromLeft);
+    router.define('/cours', handler: coursHandler, transitionType: TransitionType.inFromLeft);
 
   }
 }
