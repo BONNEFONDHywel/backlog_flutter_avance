@@ -91,8 +91,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               onPressed: () {
                 if (kDebugMode) {
                   print(nameController.text);
-                }
-                if (kDebugMode) {
                   print(passwordController.text);
                 }
               },
