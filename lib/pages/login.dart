@@ -11,14 +11,25 @@ void main() async {
   runApp(const MainApp());
 }
 
+// Permet un retour sur la page d'accueil (aka routes Alex)
+AppBar buildAppBar(BuildContext context) {
+
+  return AppBar(
+    leading: const BackButton(),
+    backgroundColor: Colors.blueAccent,
+    elevation: 0,
+  );
+}
+
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
-        body: MyStatefulWidget(),
+        appBar: buildAppBar(context),
+        body: const MyStatefulWidget(),
       ),
     );
   }
