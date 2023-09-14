@@ -1,21 +1,24 @@
+import 'dart:typed_data';
+
 import 'package:ecurie/component/appbar.dart';
 import 'dart:io';
-import 'dart:convert';
-
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'dart:convert';
 
 import 'package:ecurie/modeles/class_inscription.dart';
 import 'package:ecurie/db/db.dart';
 
-class Screen2 extends StatefulWidget {
-  const Screen2({super.key});
+class Inscription extends StatefulWidget {
+  const Inscription({super.key});
 
   @override
-  _Screen2 createState() => _Screen2();
+  _Inscription createState() => _Inscription();
+
 }
 
-class _Screen2 extends State<Screen2> {
+class _Inscription extends State<Inscription> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -53,33 +56,50 @@ class _Screen2 extends State<Screen2> {
               Row(
                 children: [
                   TextButton(
+
                     child: const Text('Valider'),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         String name = nameController.text;
                         String password = passwordController.text;
                         String email = emailController.text;
-                        String? picture = _selectedImagePath == null ? "assets/myGentleMan.jpg" : _selectedImagePath;
+                        String? picture = "assets/myGentleMan.jpg";
 
-                        User personPerso = User(
-                          name: name,
-                          password: password,
-                          email: email,
-                          picture: picture,
-                        );
+                        if (_selectedImagePath != null)  {
+                          compressAndSaveImage(_selectedImagePath!).then((compressedImageBase64) async {
+                            User personPerso = User(
+                              name: name,
+                              password: password,
+                              email: email,
+                              picture: compressedImageBase64,
+                            );
 
-                        String jsonUser = jsonEncode(personPerso);
-                        print(jsonUser);
+                            Map<String, dynamic> jsonUser = personPerso.toMap();
+                            await DbMongo.insertInDb(jsonUser, 'Inscription');
 
-                        // DbMongo.insertInDb(jsonUser, 'Inscription');
+                            Navigator.of(context).pop();
+                          });
+                        } else {
+                          User personPerso = User(
+                            name: name,
+                            password: password,
+                            email: email,
+                            picture: picture,
+                          );
+
+                          Map<String, dynamic> jsonUser = personPerso.toMap();
+                          DbMongo.insertInDb(jsonUser, 'Inscription');
+
+                          Navigator.of(context).pop();
+                        }
                       }
                     },
                   ),
+
                   TextButton(
                     child: const Text('Annuler'),
                     onPressed: () {
-                      print('pas réussi');
-                      // Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                     },
                   ),
                 ],
@@ -89,6 +109,20 @@ class _Screen2 extends State<Screen2> {
         ),
       ),
     );
+  }
+
+  Future<String> compressAndSaveImage(String imagePath) async {
+    Uint8List? imageBytes = await FlutterImageCompress.compressWithFile(
+      imagePath,
+      quality: 70, // Ajustez la qualité de compression selon vos besoins
+    );
+
+    if (imageBytes != null) {
+      String compressedImageBase64 = base64Encode(imageBytes);
+      return compressedImageBase64;
+    } else {
+      throw Exception('Failed to compress image');
+    }
   }
 
   Widget pictureForm(BuildContext context) {
@@ -106,7 +140,7 @@ class _Screen2 extends State<Screen2> {
           child: InkWell(
             onTap: () async {
               FilePickerResult? result = await FilePicker.platform.pickFiles(
-                type: FileType.image, // Vous pouvez spécifier le type de fichier que vous voulez (image, vidéo, etc.)
+                type: FileType.image,
               );
 
               if (result != null) {

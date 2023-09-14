@@ -11,7 +11,7 @@ var homePageHandler = Handler(
 
 var inscriptionHandler = Handler(
     handlerFunc: ((BuildContext? context, Map<String, dynamic> params) {
-      return Screen2();
+      return Inscription();
     }));
 
 var coursHandler = Handler(
