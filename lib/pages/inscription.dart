@@ -9,7 +9,7 @@ import 'package:ecurie/modeles/class_inscription.dart';
 import 'package:ecurie/db/db.dart';
 
 class Screen2 extends StatefulWidget {
-  Screen2({super.key});
+  const Screen2({super.key});
 
   @override
   _Screen2 createState() => _Screen2();
