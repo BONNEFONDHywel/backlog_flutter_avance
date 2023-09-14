@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'db/db.dart';
+import '../db/db.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Activation de la page avec base de données
