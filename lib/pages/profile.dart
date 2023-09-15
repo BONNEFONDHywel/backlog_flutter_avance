@@ -6,7 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() async {
   await dotenv.load(fileName: "assets/.env");
   var db = DbMongo();
-  db.connectToDb();
+  DbMongo.connectToDb();
   runApp(const MainApp());
 }
 
