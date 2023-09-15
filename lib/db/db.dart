@@ -43,6 +43,19 @@ class DbMongo {
     return result;
 
   }
+
+  static Future<List> userAccount(nameController, passwordController) async {
+    var coll = db.collection('Inscription');
+    print(nameController);
+    var userList = [];
+    try {
+      userList = await coll.find(where.eq('name', nameController.text)).toList();
+    } catch(e) {
+      print('Erreur lors de la récupération : $e');
+    }print(userList);
+
+    return userList;
+  }
   /*Future<void> deleteItem(String nameCollection, Map<String, dynamic>item) async{
     var collection = db.collection(nameCollection);
 

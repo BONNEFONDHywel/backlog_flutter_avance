@@ -6,8 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 // Activation de la page avec base de données
 void main() async {
   await dotenv.load(fileName: "assets/.env");
-  var db = DbMongo();
-  db.connectToDb();
+  DbMongo.connectToDb();
   runApp(const MainApp());
 }
 
@@ -101,7 +100,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               TextButton(
                 child: const Text(
                   "J'ai oublié mon mot de passe",
-                  style: TextStyle(fontSize: 10),
+                  style: TextStyle(fontSize: 15),
                 ),
                 onPressed: () {
                 },
@@ -118,7 +117,19 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             ),
             child: ElevatedButton(
               child: const Text('Valider'),
-              onPressed: () {
+              onPressed: () async {
+                var test = await DbMongo.userAccount(nameController, passwordController);
+                if (test.isEmpty ) {
+                  if (kDebugMode) {
+                    print("Erreur");
+                  }
+                } else if (passwordController.text != test[0]['password']) {
+                  if (kDebugMode) {
+                    print("Erreur 2");
+                  }
+                } else {
+                  Navigator.pushNamed(context, '/');
+                }
                 if (kDebugMode) {
                   print(nameController.text);
                   print(passwordController.text);
