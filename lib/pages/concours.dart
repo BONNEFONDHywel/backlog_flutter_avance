@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:date_field/date_field.dart';
 import 'package:ecurie/component/appbar.dart';
 import 'package:ecurie/component/concours_utils.dart';
 import 'package:ecurie/component/drawerApp.dart';
+import 'package:ecurie/component/picture.dart';
 import 'package:ecurie/db/db.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -36,36 +40,40 @@ class _ConcoursState extends State<Concours> {
   // participer et le niveau choisi
   bool? _Isparticiping = true;
   String _niveauParticipants = '';
+  var _selectedImagePath;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: buildApp(context, 'Concours'),
         drawer: buildDrawer(context),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => _buildFormConcours(context, ),
+          onPressed: () => _buildFormConcours(
+            context,
+          ),
           child: Icon(Icons.add),
         ),
-        body:
-            Padding(padding: EdgeInsets.all(12), child: buildListConcours(_dataUpdated,user, () {
+        body: Padding(
+            padding: EdgeInsets.all(12),
+            child: buildListConcours(_dataUpdated, user, () {
               setState(() {
                 _dataUpdated = !_dataUpdated;
               });
             })));
   }
 
-
-  _buildFormConcours(BuildContext context) {
+  _buildFormConcours(BuildContext context) async {
+    _selectedImagePath;
     String? _name = '';
     String? _adresse = '';
-    String? _photo = null;
-    DateTime dateinput = DateTime.now();
+      DateTime dateinput = DateTime.now();
     Map<String, dynamic> addConcours = Map();
     // Multi selection de niveau form
     List? _niveauPossible = ["Amateur", "Club1", "Club2", "Club3", "Club4"];
     _selectedNiveauPossible = [];
     _niveauParticipants = '';
     final _formKey = GlobalKey<FormState>();
-
+print('helloe $_selectedImagePath');
     bool error = false;
     return showDialog(
         context: context,
@@ -89,6 +97,14 @@ class _ConcoursState extends State<Concours> {
                                       backgroundColor: Colors.redAccent),
                                 )
                               : SizedBox.shrink(),
+                          PictureForm(
+                            selectedImagePath: _selectedImagePath,
+                            onImageSelected: (path) {
+                              setState(() {
+                                _selectedImagePath = path;
+                              });
+                            },
+                          ),
                           // Nom du concours
                           TextFormField(
                               decoration: const InputDecoration(
@@ -125,7 +141,7 @@ class _ConcoursState extends State<Concours> {
                             icon: Icon(Icons.check),
                             onTap: (values) {
                               setState(() {
-                                _selectedNiveauPossible = values;
+                              _selectedNiveauPossible = values;
                               });
                             },
                           ),
@@ -224,30 +240,60 @@ class _ConcoursState extends State<Concours> {
                                   setState(() {
                                     error = false;
                                   });
-                                  addConcours = {
-                                    "name": _name,
-                                    "adresse": _adresse,
-                                    "photo": _photo,
-                                    "date": dateinput,
-                                    "participants": _Isparticiping == true
-                                        ? [
-                                            {
-                                              'user': user,
-                                              'niveau': _niveauParticipants
-                                            }
-                                          ]
-                                        : [],
-                                    "niveaux_possibles": _selectedNiveauPossible
-                                  };
+
                                   if (_formKey.currentState!.validate()) {
-                                    setState(() {
-                                      _dataUpdated = !_dataUpdated;
+                                    print('hello ${_selectedImagePath}');
+
+                                    compressAndSaveImage(_selectedImagePath!)
+                                        .then((compressedImageBase64) async {
+                                      if (_selectedImagePath != null) {
+                                        addConcours = {
+                                          "name": _name,
+                                          "adresse": _adresse,
+                                          "photo": compressedImageBase64,
+                                          "date": dateinput,
+                                          "participants": _Isparticiping == true
+                                              ? [
+                                                  {
+                                                    'user': user,
+                                                    'niveau':
+                                                        _niveauParticipants
+                                                  }
+                                                ]
+                                              : [],
+                                          "niveaux_possibles":
+                                              _selectedNiveauPossible
+                                        };
+                                      } else {
+                                        addConcours = {
+                                          "name": _name,
+                                          "adresse": _adresse,
+                                          "photo": null,
+                                          "date": dateinput,
+                                          "participants": _Isparticiping == true
+                                              ? [
+                                                  {
+                                                    'user': user,
+                                                    'niveau':
+                                                        _niveauParticipants
+                                                  }
+                                                ]
+                                              : [],
+                                          "niveaux_possibles":
+                                              _selectedNiveauPossible
+                                        };
+                                      }
+                                      print(addConcours);
+                                      await DbMongo.insertInDb(
+                                          addConcours, 'Concours');
+                                      setState(() {
+                                        _dataUpdated = !_dataUpdated;
+                                      });
+                                      Navigator.pop(context);
                                     });
-                                    print(_dataUpdated);
-                                    DbMongo.insertInDb(addConcours, 'Concours');
-                                    Navigator.pop(context);
                                   }
                                 }
+                                ;
                               },
                               child: const Text('Submit'),
                             ),
@@ -260,6 +306,4 @@ class _ConcoursState extends State<Concours> {
           );
         });
   }
-
-
 }
