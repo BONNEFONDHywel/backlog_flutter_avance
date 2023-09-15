@@ -5,6 +5,24 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+
+Future<File> assetToFile(String assetPath) async {
+  // Lire l'actif
+  final byteData = await rootBundle.load(assetPath);
+
+  // Obtenir un répertoire temporaire pour créer le fichier
+  final file = File('${(await getTemporaryDirectory()).path}/$assetPath');
+
+  // Écrire les octets de l'actif dans le fichier
+  await file.writeAsBytes(byteData.buffer.asUint8List());
+
+  return file;
+}
 
 /*Widget pictureForm(BuildContext context, _selectedImagePath) {
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
@@ -46,8 +64,9 @@ class PictureForm extends StatefulWidget {
   final String? _selectedImagePath;
   final Function onImageSelected;
 
-  PictureForm({Key? key, required String? selectedImagePath, required onImageSelected})
-      : _selectedImagePath = selectedImagePath,onImageSelected = onImageSelected,
+  const PictureForm(
+      {Key? key, required String? selectedImagePath, required this.onImageSelected})
+      : _selectedImagePath = selectedImagePath,
         super(key: key);
   @override
   _PictureFormState createState() => _PictureFormState();
@@ -56,15 +75,13 @@ class PictureForm extends StatefulWidget {
 class _PictureFormState extends State<PictureForm> {
   @override
   Widget build(BuildContext context) {
-    //widget.onImageSelected("assets/myGentleMan.jpg");
     return Stack(
       children: <Widget>[
         CircleAvatar(
-          radius: 80.0,
-          backgroundImage: widget._selectedImagePath != null
-              ? FileImage(File(widget._selectedImagePath!)) as ImageProvider
-              : AssetImage("assets/myGentleMan.jpg"),
-        ),
+            radius: 80.0,
+            backgroundImage: widget._selectedImagePath != null
+                ? FileImage(File(widget._selectedImagePath!)) as ImageProvider
+                : const AssetImage('assets/myGentleMan.jpg')),
         Positioned(
           bottom: 20.0,
           right: 20.0,
@@ -75,9 +92,7 @@ class _PictureFormState extends State<PictureForm> {
               );
 
               if (result != null) {
-print(result.files.single.path!);
-                  widget.onImageSelected(result.files.single.path!);
-
+                widget.onImageSelected(result.files.single.path!);
               }
             },
             child: const Icon(
@@ -91,7 +106,6 @@ print(result.files.single.path!);
     );
   }
 }
-
 
 Future<String> compressAndSaveImage(String imagePath) async {
   print(imagePath);
