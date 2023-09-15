@@ -40,11 +40,13 @@ class _ConcoursState extends State<Concours> {
   /*getName() async {
     user = await Session().getSession('name');
   }*/
-    //getName();
+  //getName();
+  List? listConcours = [];
+
   // participer et le niveau choisi
   bool? _Isparticiping = true;
   String _niveauParticipants = '';
-  var _selectedImagePath;
+  String? _selectedImagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -63,21 +65,20 @@ class _ConcoursState extends State<Concours> {
               setState(() {
                 _dataUpdated = !_dataUpdated;
               });
-            })));
+            }, listConcours)));
   }
 
   _buildFormConcours(BuildContext context) async {
-    _selectedImagePath;
+
     String? _name = '';
     String? _adresse = '';
-      DateTime dateinput = DateTime.now();
+    DateTime dateinput = DateTime.now();
     Map<String, dynamic> addConcours = Map();
     // Multi selection de niveau form
     List? _niveauPossible = ["Amateur", "Club1", "Club2", "Club3", "Club4"];
     _selectedNiveauPossible = [];
     _niveauParticipants = '';
     final _formKey = GlobalKey<FormState>();
-print('helloe $_selectedImagePath');
     bool error = false;
     return showDialog(
         context: context,
@@ -145,7 +146,7 @@ print('helloe $_selectedImagePath');
                             icon: Icon(Icons.check),
                             onTap: (values) {
                               setState(() {
-                              _selectedNiveauPossible = values;
+                                _selectedNiveauPossible = values;
                               });
                             },
                           ),
@@ -246,11 +247,9 @@ print('helloe $_selectedImagePath');
                                   });
 
                                   if (_formKey.currentState!.validate()) {
-                                    print('hello ${_selectedImagePath}');
-
-                                    compressAndSaveImage(_selectedImagePath!)
-                                        .then((compressedImageBase64) async {
-                                      if (_selectedImagePath != null) {
+                                    if (_selectedImagePath != null) {
+                                      compressAndSaveImage(_selectedImagePath!)
+                                          .then((compressedImageBase64) async {
                                         addConcours = {
                                           "name": _name,
                                           "adresse": _adresse,
@@ -268,33 +267,32 @@ print('helloe $_selectedImagePath');
                                           "niveaux_possibles":
                                               _selectedNiveauPossible
                                         };
-                                      } else {
-                                        addConcours = {
-                                          "name": _name,
-                                          "adresse": _adresse,
-                                          "photo": null,
-                                          "date": dateinput,
-                                          "participants": _Isparticiping == true
-                                              ? [
-                                                  {
-                                                    'user': user,
-                                                    'niveau':
-                                                        _niveauParticipants
-                                                  }
-                                                ]
-                                              : [],
-                                          "niveaux_possibles":
-                                              _selectedNiveauPossible
-                                        };
-                                      }
-                                      print(addConcours);
-                                      await DbMongo.insertInDb(
-                                          addConcours, 'Concours');
-                                      setState(() {
-                                        _dataUpdated = !_dataUpdated;
                                       });
-                                      Navigator.pop(context);
+                                    } else {
+                                      addConcours = {
+                                        "name": _name,
+                                        "adresse": _adresse,
+                                        "photo": 'assets/myGentleMan.jpg',
+                                        "date": dateinput,
+                                        "participants": _Isparticiping == true
+                                            ? [
+                                                {
+                                                  'user': user,
+                                                  'niveau': _niveauParticipants
+                                                }
+                                              ]
+                                            : [],
+                                        "niveaux_possibles":
+                                            _selectedNiveauPossible
+                                      };
+                                    }
+                                    print(addConcours);
+                                    await DbMongo.insertInDb(
+                                        addConcours, 'Concours');
+                                    setState(() {
+                                      _dataUpdated = !_dataUpdated;
                                     });
+                                    Navigator.of(context).pop();
                                   }
                                 }
                                 ;

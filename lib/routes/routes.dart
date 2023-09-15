@@ -16,6 +16,7 @@ class Routes {
         });
     //router.define('/', handler: homePageHandler, transitionType: TransitionType.inFromLeft);
     router.define('/inscription', handler: inscriptionHandler, transitionType: TransitionType.inFromRight);
+    router.define('/soiree', handler: soireeHandler, transitionType: TransitionType.inFromRight);
     router.define('/connexion', handler: connexionHandler, transitionType: TransitionType.inFromRight);
     router.define('/cours', handler: coursHandler, transitionType: TransitionType.inFromRight);
     router.define('/concours', handler: concoursHandler, transitionType: TransitionType.inFromRight);

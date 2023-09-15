@@ -15,8 +15,7 @@ bool isUserRegistered(List participants, String userId) {
   return false;
 }
 
-Container buildListConcours(_dataUpdated, user, callback) {
-  List? listConcours = [];
+Widget buildListConcours(_dataUpdated, user, callback, listConcours) {
   String _niveauParticipants = '';
   bool error = false;
   final _formKey = GlobalKey<FormState>();
@@ -37,28 +36,27 @@ Container buildListConcours(_dataUpdated, user, callback) {
               listConcours = snapshot.data;
               return Expanded(
                   child: ListView.builder(
-                      key: ValueKey(_dataUpdated),
                       itemCount: listConcours?.length,
                       itemBuilder: (BuildContext context, int index) {
                         String newFormat = DateFormat('dd/MM/yyyy hh:mm')
                             .format(listConcours?[index]["date"]);
-                        var photo = listConcours?[index]["photo"] == null
-                            ? null
-                            : MemoryImage(
-                                base64Decode(listConcours?[index]["photo"]));
+                        var photo = listConcours?[index]["photo"] == 'assets/myGentleMan.jpg';
+
                         return Container(
                           child: Card(
                             color: Colors.white,
                             child: Row(
                               children: [
-                                photo == null
-                                    ? Container(
-                                        width: 100,
-                                        child: Icon(Icons.person_2_rounded))
-                                    : Image(
-                                        image: photo,
-                                        width: 100,
-                                      ),
+                                photo == true ? const CircleAvatar(
+                            radius: 80.0,
+                                backgroundImage:
+                                AssetImage( 'assets/myGentleMan.jpg')
+                            ): Image(
+                                  image:  MemoryImage(
+                                      base64Decode(listConcours?[index]["photo"])),
+                                  width: 100,
+
+                                ),
                                 Padding(
                                     padding: EdgeInsets.all(4),
                                     child: Column(
@@ -201,7 +199,7 @@ Container buildListConcours(_dataUpdated, user, callback) {
                                                                                     ];
                                                                                     print(new_participant);
                                                                                     DbMongo.updateConcoursParticipants(listConcours?[index]["name"], new_participant);
-                                                                                    Navigator.pop(context);
+                                                                                    Navigator.of(context).pop();
                                                                                   }
                                                                                 }
                                                                               },
