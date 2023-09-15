@@ -93,7 +93,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             child: ElevatedButton(
               child: const Text('Valider'),
               onPressed: () async {
-                var test = await DbMongo.userAccount(nameController, passwordController);
+                var test = await DbMongo.userLogin(nameController, passwordController);
                 if (test.isEmpty ) {
                   if (kDebugMode) {
                     print("Erreur");
@@ -104,7 +104,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   }
                 } else {
                   Session().setSession('name', nameController.text);
-
                   Navigator.pushNamed(context, '/');
                 }
                 if (kDebugMode) {

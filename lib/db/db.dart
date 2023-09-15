@@ -61,7 +61,7 @@ class DbMongo {
     }
   }
 
-  static Future<List> userAccount(nameController, passwordController) async {
+  static Future<List> userLogin(nameController, passwordController) async {
     var coll = db.collection('Inscription');
     print(nameController);
     var userList = [];
