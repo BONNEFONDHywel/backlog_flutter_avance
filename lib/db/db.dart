@@ -49,6 +49,7 @@ class DbMongo {
     return result;
 
   }
+
   static Future<void> updateConcoursParticipants(String id, List participants) async {
     var collection = db.collection('Concours');
     try {
@@ -57,6 +58,18 @@ class DbMongo {
     } catch (e) {
       print('Erreur lors de la mise à jour : $e');
     }
+
+  static Future<List> userAccount(nameController, passwordController) async {
+    var coll = db.collection('Inscription');
+    print(nameController);
+    var userList = [];
+    try {
+      userList = await coll.find(where.eq('name', nameController.text)).toList();
+    } catch(e) {
+      print('Erreur lors de la récupération : $e');
+    }
+
+    return userList;
   }
   /*Future<void> deleteItem(String nameCollection, Map<String, dynamic>item) async{
     var collection = db.collection(nameCollection);

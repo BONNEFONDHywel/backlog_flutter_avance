@@ -1,9 +1,11 @@
 import 'package:ecurie/pages/concours.dart';
 import 'package:ecurie/pages/cours.dart';
 import 'package:ecurie/pages/flux_dactivite.dart';
+import 'package:ecurie/pages/inscription.dart';
+
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:ecurie/pages/inscription.dart';
+
 
 import '../pages/connexion.dart';
 
@@ -14,7 +16,7 @@ var homePageHandler = Handler(
 
 var inscriptionHandler = Handler(
     handlerFunc: ((BuildContext? context, Map<String, dynamic> params) {
-      return Screen2();
+      return Inscription();
     }));
 
 var coursHandler = Handler(

@@ -5,8 +5,12 @@ import 'pages/cours.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:ecurie/pages/flux_dactivite.dart';
+import 'package:ecurie/modeles/session.dart';
 
 void main() async  {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  Session().initSharedPreferences();
 
   await dotenv.load(fileName: "assets/.env");
   await DbMongo.connectToDb();
