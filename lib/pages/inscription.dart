@@ -1,4 +1,5 @@
 import 'package:ecurie/component/appbar.dart';
+import 'package:ecurie/component/drawerApp.dart';
 import 'dart:io';
 import 'dart:convert';
 
@@ -27,6 +28,7 @@ class _Screen2 extends State<Screen2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: buildDrawer(context),
       appBar: buildApp(context, 'Inscription'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),

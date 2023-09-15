@@ -1,3 +1,4 @@
+import 'package:ecurie/pages/concours.dart';
 import 'package:ecurie/pages/cours.dart';
 import 'package:ecurie/pages/flux_dactivite.dart';
 import 'package:fluro/fluro.dart';
@@ -17,4 +18,9 @@ var inscriptionHandler = Handler(
 var coursHandler = Handler(
     handlerFunc: ((BuildContext? context, Map<String, dynamic> params) {
       return Cours();
+    }));
+
+var concoursHandler = Handler(
+    handlerFunc: ((BuildContext? context, Map<String, dynamic> params) {
+      return Concours();
     }));

@@ -35,13 +35,28 @@ class DbMongo {
     List result = [];
     try {
        result = await collection.find().toList();
-       result.sort((a, b) => b["datetime"].compareTo(a["datetime"]));
+       if(nameCollection == 'Cours'){
+         result.sort((a, b) => b["datetime"].compareTo(a["datetime"] ) );
+
+    }else{
+         result.sort((a, b) =>b["date"].compareTo(a["date"] ) );
+
+       }
 
     } catch (e) {
       print('Erreur lors de la récupération : $e');
     }
     return result;
 
+  }
+  static Future<void> updateConcoursParticipants(String id, List participants) async {
+    var collection = db.collection('Concours');
+    try {
+      await collection.update(where.eq('name', id), modify.set('participants', participants));
+      print('Concours mis à jour avec succès');
+    } catch (e) {
+      print('Erreur lors de la mise à jour : $e');
+    }
   }
   /*Future<void> deleteItem(String nameCollection, Map<String, dynamic>item) async{
     var collection = db.collection(nameCollection);

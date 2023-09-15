@@ -9,7 +9,7 @@ import 'package:ecurie/pages/flux_dactivite.dart';
 void main() async  {
 
   await dotenv.load(fileName: "assets/.env");
-  DbMongo.connectToDb();
+  await DbMongo.connectToDb();
   runApp(const MainApp());
 }
 
