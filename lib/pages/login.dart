@@ -1,3 +1,4 @@
+import 'package:ecurie/modeles/session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../db/db.dart';
@@ -128,6 +129,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                     print("Erreur 2");
                   }
                 } else {
+                  Session().setSession('name', nameController.text);
+
                   Navigator.pushNamed(context, '/');
                 }
                 if (kDebugMode) {
