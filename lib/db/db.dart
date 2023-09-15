@@ -35,7 +35,13 @@ class DbMongo {
     List result = [];
     try {
        result = await collection.find().toList();
-       result.sort((a, b) => b["datetime"].compareTo(a["datetime"]));
+       if(nameCollection == 'Cours'){
+         result.sort((a, b) => b["datetime"].compareTo(a["datetime"] ) );
+
+    }else{
+         result.sort((a, b) =>b["date"].compareTo(a["date"] ) );
+
+       }
 
     } catch (e) {
       print('Erreur lors de la récupération : $e');
@@ -43,6 +49,15 @@ class DbMongo {
     return result;
 
   }
+
+  static Future<void> updateConcoursParticipants(String id, List participants) async {
+    var collection = db.collection('Concours');
+    try {
+      await collection.update(where.eq('name', id), modify.set('participants', participants));
+      print('Concours mis à jour avec succès');
+    } catch (e) {
+      print('Erreur lors de la mise à jour : $e');
+    }
 
   static Future<List> userAccount(nameController, passwordController) async {
     var coll = db.collection('Inscription');
@@ -52,7 +67,7 @@ class DbMongo {
       userList = await coll.find(where.eq('name', nameController.text)).toList();
     } catch(e) {
       print('Erreur lors de la récupération : $e');
-    }print(userList);
+    }
 
     return userList;
   }

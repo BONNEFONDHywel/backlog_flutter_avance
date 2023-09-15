@@ -1,3 +1,4 @@
+import 'package:ecurie/component/drawerApp.dart';
 import 'package:ecurie/db/db.dart';
 import 'package:ecurie/component/appbar.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class Cours extends StatefulWidget {
 }
 
 class _CoursState extends State<Cours> {
-  int user = 2;
+  String user = Session().getSession('name');
   //var _selectedDay;
   //var _focusedDay;
   List<DropdownMenuItem<String>> get dropdownItemsTerrain {
@@ -59,7 +60,7 @@ class _CoursState extends State<Cours> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(drawer: buildDrawer(context),
       appBar: buildApp(context, 'Cours'),
       body: Container(
           child: Column(
@@ -126,8 +127,15 @@ class _CoursState extends State<Cours> {
                 listCoursInactive = [];
                 listCoursActive = [];
                 listMyCours = [];
+                DateTime now = DateTime.now();
+                DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1)); // Lundi
+                DateTime endOfWeek = startOfWeek.add(Duration(days: 6)); // Dimanche
+                List? coursDeLaSemaine = snapshot.data?.where((cours) {
+                  DateTime coursDate = cours['datetime'];
+                  return coursDate.isAfter(startOfWeek) && coursDate.isBefore(endOfWeek);
+                }).toList();
 
-                for (var item in snapshot.data!) {
+                for (var item in coursDeLaSemaine!) {
                   if (_StatusCours == "active" || _StatusCours == 'inactive') {
                     if (item['statut'] == 'Accept') {
                       if (DateTime.now().isAfter(item['datetime'])) {
