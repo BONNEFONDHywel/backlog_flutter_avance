@@ -7,9 +7,10 @@ class User {
   int? age;
   String? ffe;
   int role;
+  final DateTime datetime;
 
   User(
-    {required this.name, required this.password, required this.email, this.picture = 'assets/myGentleMan.jpg', this.phone, this.age, this.ffe, this.role = 1});
+    {required this.name, required this.password, required this.email, this.picture = 'assets/myGentleMan.jpg', this.phone, this.age, this.ffe, this.role = 1, required this.datetime});
 
   Map<String, dynamic> toMap() {
     return {
@@ -21,6 +22,7 @@ class User {
       'age': age,
       'ffe': ffe,
       'role': role,
+      'datetime': datetime,
     };
   }
 }
