@@ -19,7 +19,7 @@ class Concours extends StatefulWidget {
 }
 
 class _ConcoursState extends State<Concours> {
-  int user = 2;
+  String user = Session().getSession('name');
   List? _selectedNiveauPossible = [];
   bool _dataUpdated = false;
 

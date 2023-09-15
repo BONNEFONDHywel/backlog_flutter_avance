@@ -15,7 +15,7 @@ class Cours extends StatefulWidget {
 }
 
 class _CoursState extends State<Cours> {
-  int user = 2;
+  String user = Session().getSession('name');
   //var _selectedDay;
   //var _focusedDay;
   List<DropdownMenuItem<String>> get dropdownItemsTerrain {
