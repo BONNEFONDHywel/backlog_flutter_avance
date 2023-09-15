@@ -70,6 +70,7 @@ class _Inscription extends State<Inscription> {
                         String password = passwordController.text;
                         String email = emailController.text;
                         String? picture = "assets/myGentleMan.jpg";
+                        DateTime now = DateTime.now();
 
                         if (_selectedImagePath != null)  {
                           compressAndSaveImage(_selectedImagePath!).then((compressedImageBase64) async {
@@ -78,6 +79,7 @@ class _Inscription extends State<Inscription> {
                               password: password,
                               email: email,
                               picture: compressedImageBase64,
+                              datetime: now,
                             );
 
                             Map<String, dynamic> jsonUser = personPerso.toMap();
@@ -87,7 +89,6 @@ class _Inscription extends State<Inscription> {
                             await Session().setSession("email", email);
                             await Session().setSession("picture", compressedImageBase64);
 
-                            String? username = await Session().getSession("name");
                             Navigator.pushNamed(context, '/');
                           });
                         } else {
@@ -96,6 +97,7 @@ class _Inscription extends State<Inscription> {
                             password: password,
                             email: email,
                             picture: picture,
+                            datetime: now,
                           );
 
                           Map<String, dynamic> jsonUser = personPerso.toMap();

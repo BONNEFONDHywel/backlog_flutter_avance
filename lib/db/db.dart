@@ -35,7 +35,7 @@ class DbMongo {
     List result = [];
     try {
        result = await collection.find().toList();
-       if(nameCollection == 'Cours'){
+       if(nameCollection == 'Cours' || nameCollection == 'Concours' || nameCollection == "Inscription" || nameCollection == "Soirees"){
          result.sort((a, b) => b["datetime"].compareTo(a["datetime"] ) );
 
     }else{
