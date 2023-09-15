@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-
+import 'package:ecurie/component/appbar.dart';
 import 'package:ecurie/routes/routes.dart';
+
+import 'package:flutter/material.dart';
 
 /*
 * Mettre à la place de cette, la page de flux d'activité
@@ -22,12 +23,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       onGenerateRoute: Routes.router.generator,
-      // home: Screen1(),
+      home: Scaffold(appBar:buildApp(context,'Accueil'),body: Text('hello') ,),
     );
   }
 }
