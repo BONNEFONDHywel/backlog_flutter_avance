@@ -1,3 +1,5 @@
+import 'package:ecurie/component/appbar.dart';
+import 'package:ecurie/component/drawerApp.dart';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -33,6 +35,7 @@ class _Inscription extends State<Inscription> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: buildDrawer(context),
       appBar: buildApp(context, 'Inscription'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),

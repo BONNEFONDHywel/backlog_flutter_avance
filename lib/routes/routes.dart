@@ -15,8 +15,10 @@ class Routes {
           return;
         });
     //router.define('/', handler: homePageHandler, transitionType: TransitionType.inFromLeft);
-    router.define('/inscription', handler: inscriptionHandler, transitionType: TransitionType.inFromLeft);
-    router.define('/cours', handler: coursHandler, transitionType: TransitionType.inFromLeft);
+    router.define('/inscription', handler: inscriptionHandler, transitionType: TransitionType.inFromRight);
+    router.define('/connexion', handler: connexionHandler, transitionType: TransitionType.inFromRight);
+    router.define('/cours', handler: coursHandler, transitionType: TransitionType.inFromRight);
+    router.define('/concours', handler: concoursHandler, transitionType: TransitionType.inFromRight);
 
   }
 }

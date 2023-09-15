@@ -13,7 +13,7 @@ void main() async  {
   Session().initSharedPreferences();
 
   await dotenv.load(fileName: "assets/.env");
-  DbMongo.connectToDb();
+  await DbMongo.connectToDb();
   runApp(const MainApp());
 }
 
