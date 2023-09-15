@@ -52,13 +52,8 @@ Future _editProfile(BuildContext context) {
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Modifier'),
-            )
-          ],
-      ),
+        )
+      );
     },
   );
 }
