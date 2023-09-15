@@ -9,6 +9,7 @@ buildDrawer(BuildContext context) {
     "Accueil": '/',
     'Cours': '/cours',
     'Inscription': '/inscription',
+    'Connexion': '/connexion',
     'Concours': '/concours'
   };
   void _onItemTapped(int index) {

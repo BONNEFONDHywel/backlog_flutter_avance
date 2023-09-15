@@ -1,3 +1,4 @@
+import 'package:ecurie/modeles/session.dart';
 import 'package:ecurie/pages/concours.dart';
 import 'package:ecurie/pages/cours.dart';
 import 'package:ecurie/pages/flux_dactivite.dart';
@@ -7,7 +8,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
 
-import '../pages/connexion.dart';
+import '../pages/login.dart';
 
 var homePageHandler = Handler(
     handlerFunc: ((BuildContext? context, Map<String, dynamic> params) {
@@ -21,13 +22,20 @@ var inscriptionHandler = Handler(
 
 var coursHandler = Handler(
     handlerFunc: ((BuildContext? context, Map<String, dynamic> params) {
-      return Cours();
+      print(Session().getSession("name"));
+if(Session().getSession("name") != null){
+  return Cours();
+}
+      return MyApp();
     }));
 var connexionHandler = Handler(
     handlerFunc: ((BuildContext? context, Map<String, dynamic> params) {
-      return Screen1();
+      return MyStatefulWidget();
     }));
 var concoursHandler = Handler(
     handlerFunc: ((BuildContext? context, Map<String, dynamic> params) {
-      return Concours();
+      if(Session().getSession("name") != null){
+        return Concours();
+
+      }return MyApp();
     }));

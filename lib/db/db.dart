@@ -53,11 +53,13 @@ class DbMongo {
   static Future<void> updateConcoursParticipants(String id, List participants) async {
     var collection = db.collection('Concours');
     try {
-      await collection.update(where.eq('name', id), modify.set('participants', participants));
+      await collection.update(
+          where.eq('name', id), modify.set('participants', participants));
       print('Concours mis à jour avec succès');
     } catch (e) {
       print('Erreur lors de la mise à jour : $e');
     }
+  }
 
   static Future<List> userAccount(nameController, passwordController) async {
     var coll = db.collection('Inscription');

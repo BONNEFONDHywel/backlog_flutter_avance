@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:ecurie/modeles/session.dart';
 import 'package:date_field/date_field.dart';
 import 'package:ecurie/component/appbar.dart';
 import 'package:ecurie/component/concours_utils.dart';
@@ -19,7 +19,7 @@ class Concours extends StatefulWidget {
 }
 
 class _ConcoursState extends State<Concours> {
-  String user = Session().getSession('name');
+  var user = 'Elisa';
   List? _selectedNiveauPossible = [];
   bool _dataUpdated = false;
 
@@ -37,6 +37,10 @@ class _ConcoursState extends State<Concours> {
     return menuItemsTerrain;
   }
 
+  /*getName() async {
+    user = await Session().getSession('name');
+  }*/
+    //getName();
   // participer et le niveau choisi
   bool? _Isparticiping = true;
   String _niveauParticipants = '';

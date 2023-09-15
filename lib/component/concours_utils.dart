@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../db/db.dart';
 
-bool isUserRegistered(List participants, int userId) {
+bool isUserRegistered(List participants, String userId) {
   for (var participant in participants) {
     if (participant['user'] == userId) {
       return true;

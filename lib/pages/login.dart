@@ -1,3 +1,5 @@
+import 'package:ecurie/component/appbar.dart';
+import 'package:ecurie/component/drawerApp.dart';
 import 'package:ecurie/modeles/session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -5,35 +7,7 @@ import '../db/db.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Activation de la page avec base de données
-void main() async {
-  await dotenv.load(fileName: "assets/.env");
-  DbMongo.connectToDb();
-  runApp(const MainApp());
-}
 
-// Permet un retour sur la page d'accueil (aka routes Alex)
-AppBar buildAppBar(BuildContext context) {
-
-  return AppBar(
-    leading: const BackButton(),
-    backgroundColor: Colors.blueAccent,
-    elevation: 0,
-  );
-}
-
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: buildAppBar(context),
-        body: const MyStatefulWidget(),
-      ),
-    );
-  }
-}
 
 class MyStatefulWidget extends StatefulWidget {
   const MyStatefulWidget({Key? key}) : super(key: key);
@@ -49,7 +23,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Scaffold(appBar: buildApp(context, "Connexion"),drawer: buildDrawer(context), body: Padding(
       padding: const EdgeInsets.all(15),
       child: ListView(
         children: <Widget>[
@@ -157,6 +131,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           ),
         ],
       )
-    );
+    ));
   }
 }

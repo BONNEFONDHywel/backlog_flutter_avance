@@ -4,6 +4,7 @@ import 'package:ecurie/component/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:date_field/date_field.dart';
+import 'package:ecurie/modeles/session.dart';
 
 import 'package:table_calendar/table_calendar.dart';
 
@@ -15,7 +16,7 @@ class Cours extends StatefulWidget {
 }
 
 class _CoursState extends State<Cours> {
-  String user = Session().getSession('name');
+  var user ;
   //var _selectedDay;
   //var _focusedDay;
   List<DropdownMenuItem<String>> get dropdownItemsTerrain {
@@ -53,6 +54,10 @@ class _CoursState extends State<Cours> {
       DropdownMenuItem(child: Text("Mes Cours"), value: "moi"),
     ];
     return menuItemsTerrain;
+  }
+
+  getName() async {
+    user = await Session().getSession('name');
   }
 
   bool _dataUpdated = false;
@@ -294,7 +299,7 @@ class _CoursState extends State<Cours> {
                             "discipline": _discipline,
                             "datetime": dateinput,
                             "user": user,
-                            "statut": "Refuse"
+                            "statut": "Accept"
                           };
                           if (_formKey.currentState!.validate()) {
                             setState(() {
