@@ -1,14 +1,15 @@
 import 'dart:typed_data';
-
-import 'package:ecurie/component/appbar.dart';
 import 'dart:io';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:convert';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
-import 'package:ecurie/modeles/class_inscription.dart';
+import 'package:ecurie/component/appbar.dart';
+import 'package:ecurie/modeles/user_class.dart';
 import 'package:ecurie/db/db.dart';
+import 'package:ecurie/modeles/session.dart';
 
 class Inscription extends StatefulWidget {
   const Inscription({super.key});
@@ -24,6 +25,8 @@ class _Inscription extends State<Inscription> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController pictureController = TextEditingController();
+
+  var sessionManager = SessionManager();
 
   String? _selectedImagePath;
 
@@ -77,7 +80,12 @@ class _Inscription extends State<Inscription> {
                             Map<String, dynamic> jsonUser = personPerso.toMap();
                             await DbMongo.insertInDb(jsonUser, 'Inscription');
 
-                            Navigator.of(context).pop();
+                            await Session().setSession("name",name);
+                            await Session().setSession("email", email);
+                            await Session().setSession("picture", compressedImageBase64);
+
+                            String? username = await Session().getSession("name");
+                            Navigator.pushNamed(context, '/');
                           });
                         } else {
                           User personPerso = User(
@@ -90,7 +98,11 @@ class _Inscription extends State<Inscription> {
                           Map<String, dynamic> jsonUser = personPerso.toMap();
                           DbMongo.insertInDb(jsonUser, 'Inscription');
 
-                          Navigator.of(context).pop();
+                          Session().setSession("name",name);
+                          Session().setSession("email", email);
+                          Session().setSession("picture", picture);
+
+                          Navigator.pushNamed(context, '/');
                         }
                       }
                     },
@@ -99,7 +111,7 @@ class _Inscription extends State<Inscription> {
                   TextButton(
                     child: const Text('Annuler'),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.pushNamed(context, '/');
                     },
                   ),
                 ],
@@ -114,7 +126,7 @@ class _Inscription extends State<Inscription> {
   Future<String> compressAndSaveImage(String imagePath) async {
     Uint8List? imageBytes = await FlutterImageCompress.compressWithFile(
       imagePath,
-      quality: 70, // Ajustez la qualité de compression selon vos besoins
+      quality: 70,
     );
 
     if (imageBytes != null) {
