@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../db/db.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:ecurie/modeles/user_class.dart';
 
 // Activation de la page avec base de données
 void main() async {
